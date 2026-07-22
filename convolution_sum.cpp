@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include <raymath.h>
 
+
 const int screenWidth = 1600;
 const int screenHeight = 900;
 const int pointCount = 300;
@@ -13,12 +14,12 @@ Vector2 center = {50.0f, 50.0f};
 auto equation = [](auto a)  {return a * a * a;};
 auto sin_signal = [] (auto t, auto f) {return std::sin(t * 360.0f * f);};
 
-void DrawGraph(unsigned long pointCount, float startValue);
+void DrawGraph(int pointCount, float startValue);
 void DrawCoordinatePlane();
 
 int main(void)
 {
-   
+    
     InitWindow(screenWidth, screenHeight, "ConvolutionSum");
     
     while(!WindowShouldClose())
@@ -26,11 +27,12 @@ int main(void)
         BeginDrawing(); 
        
         ClearBackground(RAYWHITE);
-
+        //analyticDraw.DrawCoordinatePlane();
         DrawCoordinatePlane();
-
+        //analyticDraw.DrawGraph(sin_signal, 0.2f);
         DrawGraph(pointCount, 0.0f);
 
+        
         EndDrawing();
     }
           
@@ -50,9 +52,9 @@ void DrawGraph(int pointCount, float startValue){
     {
 
 
-       pointsPositive[i] = {10 * (startValue * 100) + (screenWidth / 2) , -(sin_signal(startValue, 0.2f) * 100) + (screenHeight / 2) }; 
+       pointsPositive[i] = {(startValue * 100) + (screenWidth / 2) , -(equation(startValue) * 100) + (screenHeight / 2) }; 
        
-       startValue = startValue + 0.001f;
+       startValue = startValue + 0.01f;
 
     }
     
@@ -61,12 +63,12 @@ void DrawGraph(int pointCount, float startValue){
     for(int i = 0; i < pointCount; i++)
     {
         startValue = startValue - 0.01f;
-        pointsNegative[i] = {(startValue * 200) + (screenWidth / 2) , -(equation(startValue) * 200) + (screenHeight / 2)};     
+        pointsNegative[i] = {(startValue * 100) + (screenWidth / 2) , -(equation(startValue) * 100) + (screenHeight / 2)};     
 
     }
       
        DrawSplineBezierCubic(pointsPositive, pointCount, 2, BLUE);
-      // DrawSplineBezierCubic(pointsNegative, pointCount, 2, BLUE);
+       DrawSplineBezierCubic(pointsNegative, pointCount, 2, BLUE);
      
 }
 void DrawCoordinatePlane()
